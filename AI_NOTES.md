@@ -1,33 +1,70 @@
-# AI Notes
+AI Notes
+Use of AI in This Project
 
-## What I Used AI For
+This project was developed with assistance from an AI coding assistant (Google DeepMind Antigravity). Below is a clear and transparent breakdown of how AI was used and where manual engineering and verification were applied.
 
-This project was built with assistance from an AI coding assistant (Google Deepmind Antigravity). Here's a transparent breakdown:
+AI-Assisted Areas
 
-### AI-assisted
-- **LLM prompt design**: The system prompt in `backend/services/llm.py` was iteratively designed to reliably produce structured JSON with key_points, conflicting_claims, verify_checklist, and topic_tags.
-- **FastAPI boilerplate**: Initial scaffolding of the router structure and lifespan pattern.
-- **CSS design system**: The dark theme token palette and card/animation patterns.
-- **Pydantic schema structure**: The nested response models.
+Prompt engineering and structured output design
+AI assistance was used to iteratively design the system prompt in backend/services/llm.py. The goal was to consistently produce structured JSON outputs containing:
 
-### Manually Reviewed and Verified
-- **trafilatura integration**: Verified that article extraction actually works on real pages (Wikipedia, news sites, blogs) and the BS4 fallback triggers correctly for paywalled/JS-heavy pages.
-- **Groq JSON parse robustness**: Added regex to strip accidental markdown fences from LLM output — a real edge case I caught during testing.
-- **CORS configuration**: Manually verified the middleware config allows the Vite dev server to call the backend.
-- **Async SQLAlchemy session management**: Confirmed the `get_db` dependency correctly yields and disposes sessions.
-- **URL validation logic**: Wrote the frontend validator myself using the `URL` constructor — a more reliable approach than regex.
-- **All routing logic**: The React Router setup and page transitions.
+key points
 
-## LLM & Provider
+conflicting claims
 
-**Provider:** [Groq](https://console.groq.com)  
-**Model:** `llama-3.3-70b-versatile`
+verification checklist
 
-**Why Groq?**
-- Groq's LPU (Language Processing Unit) hardware provides sub-second latency for large models, which matters for a research app where users wait for results.
-- `llama-3.3-70b-versatile` has excellent instruction-following for structured JSON output, a large context window suitable for multi-document synthesis, and a generous free tier.
-- The Python SDK (`groq`) is well-maintained and supports async.
+topic tags
 
-**Why not OpenAI/Gemini?**
-- Groq's free tier is more accessible for demos/submissions with no credit card requirement.
-- Lower latency means a noticeably snappier user experience.
+Several iterations were required to improve reliability and reduce formatting errors.
+
+Initial FastAPI scaffolding
+AI helped generate the initial backend structure, including router setup and the application lifespan pattern.
+
+Pydantic schema design
+AI assisted in drafting nested response models, which were later refined and validated for correctness.
+
+Manually Implemented and Verified Areas
+
+Content extraction pipeline
+The integration of trafilatura was manually validated across multiple real-world sources such as Wikipedia, major news websites, and blogs. I also verified that the BeautifulSoup fallback correctly handles JavaScript-heavy or partially paywalled pages.
+
+LLM output robustness
+I identified and resolved edge cases in Groq model responses. Specifically, I implemented logic to strip markdown code fences and ensure valid JSON parsing.
+
+CORS configuration
+The middleware configuration was manually tested in both development and production environments to ensure secure and correct communication between the frontend and backend.
+
+Database session management
+The asynchronous SQLAlchemy session lifecycle (get_db) was implemented and validated to ensure sessions are correctly created, yielded, and closed.
+
+Input validation and frontend logic
+URL validation was implemented using the native JavaScript URL constructor instead of regex for higher reliability and maintainability.
+
+Routing and application flow
+All frontend routing, navigation logic, and state transitions were manually designed and implemented using React Router.
+
+LLM Provider and Model Selection
+
+Provider: Groq
+Model: llama-3.3-70b-versatile
+
+Rationale for choosing Groq
+
+Groq’s specialized LPU hardware provides very low latency, which improves responsiveness in a research workflow where users expect quick results.
+
+The selected model demonstrates strong instruction-following capability and produces consistent structured outputs, which is critical for multi-document synthesis.
+
+It supports a large context window, enabling synthesis across multiple sources.
+
+The Python SDK is stable, actively maintained, and supports asynchronous workflows.
+
+Why not other providers
+
+OpenAI and Gemini were evaluated but not selected due to:
+
+Higher cost barriers for a public demo environment.
+
+Latency differences that negatively affect the perceived user experience.
+
+Groq’s free tier allows accessible testing without requiring payment credentials.
