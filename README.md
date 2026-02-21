@@ -1,11 +1,6 @@
 ResearchBrief — Multi-Source Research Synthesis
 
 ResearchBrief is a web application that generates a structured research brief from multiple article or document links. Users can paste 5–10 URLs, and the system extracts, cleans, and synthesises the content using an LLM.
-How to Run
-Development (Manual)
-
-Prerequisites: Python 3.11+, Node.js 18+.
-
 # Clone repository
 git clone <repo-url>
 cd Aggrosso
