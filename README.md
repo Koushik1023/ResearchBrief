@@ -1,69 +1,100 @@
-ResearchBrief — Multi-Source Research Synthesis
+# ResearchBrief — Research Brief from Links
 
-ResearchBrief is a web application that generates a structured research brief from multiple article or document links. Users can paste 5–10 URLs, and the system extracts, cleans, and synthesises the content using an LLM.
-# Clone repository
+> Paste 5–10 URLs → AI fetches, reads, and synthesises them into a structured research brief.
+
+## Features
+-  Paste up to 10 article/blog/doc URLs
+-  AI-powered brief: summary, key points, conflicting claims, "what to verify" checklist, per-source citations
+-  Source page: see exactly what was extracted from each link  
+-  Saves & lists your last 5 briefs
+-  Compare sources view — side-by-side attribution table
+-  Topic tags auto-generated per brief
+-  `/status` page — live health of backend, database, and LLM
+
+---
+
+## Tech Stack
+| Layer | Tech |
+|---|---|
+| Backend | FastAPI (Python 3.11) |
+| Database | SQLite via SQLAlchemy (async) |
+| Content Extraction | trafilatura + BeautifulSoup4 |
+| LLM | Groq API — `llama-3.3-70b-versatile` |
+| Frontend | React 18 + Vite (TypeScript) |
+
+---
+
+## How to Run
+
+### Option 1 — Manual (Development)
+
+**Prerequisites:** Python 3.11+, Node 18+
+
+```bash
+# 1. Clone the repo
 git clone <repo-url>
 cd Aggrosso
 
-# Backend
+# 2. Backend
 cd backend
 cp .env.example .env
-# Add GROQ_API_KEY
+# Edit .env and add your GROQ_API_KEY
 pip install -r requirements.txt
-uvicorn main:app --reload
+uvicorn main:app --reload --port 8000
 
-# Frontend (new terminal)
+# 3. Frontend (new terminal)
 cd frontend
 cp .env.example .env
 npm install
 npm run dev
+# Opens http://localhost:5173
+```
 
-Docker (One Command)
+### Option 2 — Docker (One command)
+
+```bash
 cp backend/.env.example backend/.env
-# Add GROQ_API_KEY
+# Edit backend/.env with your GROQ_API_KEY
+
 docker-compose up --build
-What Is Done
+# Backend → http://localhost:8000
+# Frontend → http://localhost:5173
+```
 
-Multi-link article extraction (trafilatura + fallback).
+---
 
-Structured AI research brief:
+## Environment Variables
 
-Summary
+### backend/.env
+| Variable | Description |
+|---|---|
+| `GROQ_API_KEY` | Your Groq API key (https://console.groq.com) |
+| `GROQ_MODEL` | Model name (default: `llama-3.3-70b-versatile`) |
+| `DATABASE_URL` | SQLite path (default: `sqlite+aiosqlite:///./briefs.db`) |
+| `ALLOWED_ORIGINS` | Comma-separated CORS origins |
 
-Key points with citations
+### frontend/.env
+| Variable | Description |
+|---|---|
+| `VITE_API_URL` | Backend API URL (default: `http://localhost:8000`) |
 
-Conflicting claims
+---
 
-Verification checklist
+## What Is Done
+-  Link fetching with trafilatura (article-aware) + BS4 fallback
+-  Groq LLM brief generation (summary, key points with citations, conflicts, checklist, tags)
+-  SQLite persistence — last 5 briefs
+-  Full REST API with FastAPI (documented at `/docs`)
+-  React SPA with 5 pages: Home, Brief Detail, Saved Briefs, Compare, Status
+-  Input validation (URL format, count limits)
+- Error handling for failed fetches & LLM errors
+-  Health check endpoint
+-  Docker Compose for one-command startup
+-  Topic tags + compare view (bonus features)
 
-Topic tags
-
-Source transparency and comparison view.
-
-SQLite persistence storing the latest 5 briefs.
-
-REST API using FastAPI.
-
-React frontend with multiple views.
-
-Input validation and basic error handling.
-
-Status page monitoring backend, database, and LLM.
-
-Dockerised local setup.
-
-Hosted and deployed.
-
-What Is Not Done
-
-Authentication and multi-user workflows.
-
-Editing or annotation of briefs.
-
-Export features.
-
-Rate limiting or quotas.
-
-Streaming LLM responses.
-
-PostgreSQL migration.
+## What Is Not Done
+-  User authentication / multi-user support
+-  Brief editing or note-taking
+-  PDF export
+-  Rate limiting / quota management
+-  Streaming LLM response
