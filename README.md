@@ -3,26 +3,13 @@
 > Paste 5–10 URLs → AI fetches, reads, and synthesises them into a structured research brief.
 
 ## Features
-- 🔗 Paste up to 10 article/blog/doc URLs
-- 🤖 AI-powered brief: summary, key points, conflicting claims, "what to verify" checklist, per-source citations
-- 📑 Source page: see exactly what was extracted from each link  
-- 💾 Saves & lists your last 5 briefs
-- ⇔ Compare sources view — side-by-side attribution table
-- 🏷 Topic tags auto-generated per brief
-- 🩺 `/status` page — live health of backend, database, and LLM
-
----
-
-## Tech Stack
-| Layer | Tech |
-|---|---|
-| Backend | FastAPI (Python 3.11) |
-| Database | SQLite via SQLAlchemy (async) |
-| Content Extraction | trafilatura + BeautifulSoup4 |
-| LLM | Groq API — `llama-3.3-70b-versatile` |
-| Frontend | React 18 + Vite (TypeScript) |
-
----
+-  Paste up to 10 article/blog/doc URLs
+-  AI-powered brief: summary, key points, conflicting claims, "what to verify" checklist, per-source citations
+-  Source page: see exactly what was extracted from each link  
+-  Saves & lists your last 5 briefs
+-  Compare sources view — side-by-side attribution table
+-  Topic tags auto-generated per brief
+-  `/status` page — live health of backend, database, and LLM
 
 ## How to Run
 
